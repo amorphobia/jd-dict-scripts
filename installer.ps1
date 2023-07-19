@@ -174,7 +174,7 @@ function Install-Jiandao {
 
     $rime_user_dir = Get-RimeUserDir
 
-    if (!$OverwriteDict -and Test-Path "$rime_user_dir\jiandao.user.dict.yaml") {
+    if (!$OverwriteDict -and (Test-Path "$rime_user_dir\jiandao.user.dict.yaml")) {
         Remove-Item -Force "$dest_path\jiandao.user.dict.yaml"
     }
 
