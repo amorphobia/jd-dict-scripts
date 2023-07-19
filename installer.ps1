@@ -235,6 +235,10 @@ function Start-MainGui {
     $XMLForm.Title = "Jiandao Installer"
     $XMLForm.Icon = [WinAPI.Utils]::ExtractIcon("shell32.dll", 43, $true) | ConvertTo-ImageSource
 
+    if (!(Test-Connection "raw.githubusercontent.com" -Quiet -Count 1)) {
+        $Gitee.IsChecked = "True"
+    }
+
     $Confirm.Content = $Str.confirm
     $Cancel.Content = $Str.cancel
     $Source.Text = $Str.source
