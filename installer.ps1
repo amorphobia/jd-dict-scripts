@@ -63,7 +63,7 @@ function Get-DownloadUrl {
 
 function Start-Deployment {
     param (
-        [switch] $Deploy
+        [switch]$Deploy
     )
     $dir = Get-WeaselRoot
     if ($Deploy) {
@@ -71,6 +71,9 @@ function Start-Deployment {
     }
     if ($dir -and (Test-Path "$dir\WeaselDeployer.exe")) {
         & "$dir\WeaselDeployer.exe" $opt
+        return $true
+    } else {
+        return $false
     }
 }
 
@@ -193,6 +196,17 @@ patch:
     Write-Host "$([char]0x6b63)$([char]0x5728)$([char]0x6e05)$([char]0x7406)$([char]0x4e34)$([char]0x65f6)$([char]0x6587)$([char]0x4ef6)$([char]0x2026)"
     Remove-Item -Recurse -Force $zip
     Remove-Item -Recurse -Force $dest_path
+
+    $Deploy = [System.Windows.MessageBox]::Show("$([char]0x91cd)$([char]0x65b0)$([char]0x90e8)$([char]0x7f72)$([char]0xff1f)", "$([char]0x5b89)$([char]0x88c5)$([char]0x5b8c)$([char]0x6bd5)", "OKCancel")
+
+    if ($Deploy -eq "OK") {
+        $success = Start-Deployment -Deploy
+        if ($success) {
+            Write-Host "$([char]0x5f00)$([char]0x59cb)$([char]0x90e8)$([char]0x7f72)$([char]0x2026)"
+        } else {
+            Write-Error "$([char]0x90e8)$([char]0x7f72)$([char]0x5931)$([char]0x8d25)"
+        }
+    }
 }
 
 $Str = @{
@@ -233,6 +247,7 @@ function Start-MainGui {
 
     $Confirm.add_click({
         Install-Jiandao -Gitee:$Gitee.IsChecked -OverwriteDict:$OverwriteDict.IsChecked -OverwriteConf:$OverwriteConf.IsChecked
+        $XMLForm.Close()
     })
 
     $XMLForm.Add_Loaded({$XMLForm.Activate()})
